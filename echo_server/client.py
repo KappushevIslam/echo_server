@@ -1,8 +1,10 @@
 import socket
 
+
 def get_input(prompt, default):
     user_input = input(prompt)
     return user_input if user_input else default
+
 
 def client_program():
     host = get_input("Введите имя хоста (по умолчанию '10.0.2.15'): ", '10.0.2.15')
@@ -22,6 +24,7 @@ def client_program():
         print(data.decode())
 
     sock.close()
+
 
 if __name__ == '__main__':
     client_program()

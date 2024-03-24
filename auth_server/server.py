@@ -24,8 +24,10 @@ def load_users():
 
 # Функция для сохранения данных пользователей в файл
 def save_users(users):
+    # Удаляем объекты socket из словаря перед сохранением
+    cleaned_users = {ip: {'name': user['name'], 'password': user['password']} for ip, user in users.items()}
     with open('users.json', 'w') as file:
-        json.dump(users, file)
+        json.dump(cleaned_users, file)
 
 
 # Функция для обработки соединения с клиентом
@@ -52,7 +54,7 @@ def server_program():
 
     server_socket = socket.socket()
     server_socket.bind((host, port))
-    server_socket.listen(1)
+    server_socket.listen(3)
 
     print(f"Сервер запущен на {host}:{port}")
 

@@ -1,4 +1,14 @@
 import socket
+import threading
+
+
+def receive_messages(client):
+    while True:
+        message = client.recv(1024)
+        if message:
+            print(message.decode('utf-8'))
+        else:
+            break
 
 
 def client_program():
@@ -8,19 +18,14 @@ def client_program():
     client_socket = socket.socket()
     client_socket.connect((host, port))
 
-    data = client_socket.recv(1024)
-    print(data.decode())
+    receive_thread = threading.Thread(target=receive_messages, args=(client_socket,))
+    receive_thread.start()
 
-    if b'Enter ur name: ' in data:
-        name = input("Введите ваше имя: ")
-        client_socket.send(name.encode())
-        data = client_socket.recv(1024)
-        print(data.decode())
-
-        password = input("Введите пароль: ")
-        client_socket.send(password.encode())
-        data = client_socket.recv(1024)
-        print(data.decode())
+    while True:
+        message = input("Введите сообщение: ")
+        client_socket.send(message.encode('utf-8'))
+        if message.lower() == 'bye':
+            break
 
     client_socket.close()
 
